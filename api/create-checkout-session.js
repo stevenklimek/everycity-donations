@@ -1,8 +1,7 @@
-import Stripe from "stripe";
-
+const Stripe = require("stripe");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).end("Method Not Allowed");
   }
@@ -38,4 +37,4 @@ export default async function handler(req, res) {
     console.error(err);
     res.status(500).json({ error: "Failed to create Stripe session" });
   }
-}
+};
