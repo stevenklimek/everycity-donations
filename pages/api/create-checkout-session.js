@@ -1,8 +1,6 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2022-11-15',
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -26,7 +24,7 @@ export default async function handler(req, res) {
             product_data: {
               name: 'Support EveryCity Whispers',
             },
-            unit_amount: amount * 100,
+            unit_amount: amount * 100, // Stripe expects amount in cents
           },
           quantity: 1,
         },
@@ -37,7 +35,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error(err);
+    console.error('Stripe session creation error:', err);
     res.status(500).json({ error: 'Failed to create Stripe session' });
   }
 }
