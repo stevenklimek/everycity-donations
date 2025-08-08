@@ -1,40 +1,43 @@
-const Stripe = require("stripe");
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
 
-module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).end("Method Not Allowed");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2022-11-15',
+});
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).end('Method Not Allowed');
   }
 
   const { amount } = req.body;
 
   if (!amount || isNaN(amount) || amount < 1) {
-    return res.status(400).json({ error: "Invalid amount" });
+    return res.status(400).json({ error: 'Invalid amount' });
   }
 
   try {
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      payment_method_types: ["card"],
+      mode: 'payment',
+      payment_method_types: ['card'],
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: 'usd',
             product_data: {
-              name: "Support EveryCity Whispers",
+              name: 'Support EveryCity Whispers',
             },
             unit_amount: amount * 100,
           },
           quantity: 1,
         },
       ],
-      success_url: "https://www.everycitywhispers.com/success",
-      cancel_url: "https://www.everycitywhispers.com/cancel",
+      success_url: 'https://www.everycitywhispers.com/success',
+      cancel_url: 'https://www.everycitywhispers.com/cancel',
     });
 
     res.status(200).json({ url: session.url });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to create Stripe session" });
+    res.status(500).json({ error: 'Failed to create Stripe session' });
   }
-};
+}
