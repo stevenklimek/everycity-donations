@@ -1,4 +1,6 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -22,7 +24,7 @@ export default async function handler(req, res) {
             product_data: {
               name: "Support EveryCity Whispers",
             },
-            unit_amount: amount * 100, // cents
+            unit_amount: amount * 100,
           },
           quantity: 1,
         },
