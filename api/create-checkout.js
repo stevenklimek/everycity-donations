@@ -3,8 +3,18 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
-    return res.status(405).end('Method Not Allowed');
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   const { amount } = req.body;
@@ -22,15 +32,15 @@ export default async function handler(req, res) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Support EveryCity Whispers',
+              name: 'Buy Me a Coffee - EveryCity Whispers',
             },
-            unit_amount: amount * 100, // Convert dollars to cents
+            unit_amount: Math.round(amount * 100), // Convert dollars to cents
           },
           quantity: 1,
         },
       ],
-      success_url: `${process.env.BASE_URL}/success`,
-      cancel_url: `${process.env.BASE_URL}/cancel`,
+      success_url: `${process.env.BASE_URL}?success=true`,
+      cancel_url: `${process.env.BASE_URL}?canceled=true`,
     });
 
     res.status(200).json({ url: session.url });
