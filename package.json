@@ -1,8 +1,7 @@
 {
-  "name": "everycity-donations",
-  "version": "1.0.0",
   "dependencies": {
-    "stripe": "^14.21.0",
-    "@supabase/supabase-js": "^2.39.0"
+    "@supabase/supabase-js": "^2.43.1",
+    "micro": "^9.4.1",
+    "stripe": "^16.4.0"
   }
 }
