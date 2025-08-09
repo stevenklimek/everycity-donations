@@ -5,7 +5,10 @@ import { createClient } from '@supabase/supabase-js';
 export const config = { api: { bodyParser: false } };
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient(
+    process.env.SUPABASE_URL, 
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
@@ -23,12 +26,23 @@ export default async function handler(req, res) {
 
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
+        console.log('Processing completed checkout:', session.id);
+        
         try {
-            await supabase
+            const { data, error } = await supabase
                 .from('donations')
-                .insert([{ amount: session.amount_total / 100, stripe_id: session.id }]);
+                .insert([{ 
+                    amount: session.amount_total / 100, 
+                    stripe_id: session.id 
+                }]);
+            
+            if (error) {
+                console.error('Supabase insert error:', error);
+            } else {
+                console.log('Successfully inserted donation:', data);
+            }
         } catch (err) {
-            console.error('Supabase insert error:', err);
+            console.error('Database operation failed:', err);
         }
     }
 
