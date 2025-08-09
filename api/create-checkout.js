@@ -39,8 +39,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.BASE_URL}?success=true`,
-      cancel_url: `${process.env.BASE_URL}?canceled=true`,
+      success_url: 'https://everycitywhispers.com/success',
+      cancel_url: 'https://everycitywhispers.com/cancel',
     });
 
     res.status(200).json({ url: session.url });
