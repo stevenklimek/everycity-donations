@@ -1,30 +1,44 @@
 export default async function handler(req, res) {
-  // Add CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Or specify your domain
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+  // CORS headers are handled by vercel.json
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
-    const response = await fetch('https://cwccgwjvphpluyzxqzxh.supabase.co/rest/v1/donations?select=count(*)', {
-      headers: {
-        apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3Y2Nnd2p2cGhwbHV5enhxenhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2NjcyMDcsImV4cCI6MjA3MDI0MzIwN30.zfX9vl-mv68ceT9FcobLibMuhZOxR3cs9tBlNcpmxeo',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3Y2Nnd2p2cGhwbHV5enhxenhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2NjcyMDcsImV4cCI6MjA3MDI0MzIwN30.zfX9vl-mv68ceT9FcobLibMuhZOxR3cs9tBlNcpmxeo'
+    const response = await fetch(
+      'https://cwccgwjvphpluyzxqzxh.supabase.co/rest/v1/donations?select=count(*)', 
+      {
+        headers: {
+          'apikey': process.env.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json'
+        }
       }
+    );
+    
+    if (!response.ok) {
+      throw new Error(`Supabase error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const count = data[0]?.count || 2;
+    
+    res.status(200).json({ 
+      count: count,
+      timestamp: new Date().toISOString()
     });
     
-    if (response.ok) {
-      const data = await response.json();
-      res.json({ count: data[0]?.count || 2 });
-    } else {
-      res.json({ count: 2 });
-    }
   } catch (error) {
     console.error('Count error:', error);
-    res.json({ count: 2 });
+    res.status(200).json({ 
+      count: 2, 
+      error: 'Failed to fetch count',
+      timestamp: new Date().toISOString()
+    });
   }
 }
