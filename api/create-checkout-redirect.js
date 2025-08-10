@@ -3,11 +3,7 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  // Add CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
+  // CORS headers handled by vercel.json, but keeping OPTIONS handler
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
@@ -22,6 +18,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid amount provided' });
   }
 
+  // Validate amount range
+  const numAmount = parseFloat(amount);
+  if (numAmount > 999) {
+    return res.status(400).json({ error: 'Amount exceeds maximum limit' });
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -32,13 +34,13 @@ export default async function handler(req, res) {
             name: `Coffee Support - $${amount}`,
             description: 'Thanks for supporting the podcast with coffee! ☕',
           },
-          unit_amount: Math.round(parseFloat(amount) * 100), // Convert to cents
+          unit_amount: Math.round(numAmount * 100), // Convert to cents
         },
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: 'https://your-website.com/thank-you?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://your-website.com/donation-cancelled',
+      success_url: 'https://everycitywhispers.com/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://everycitywhispers.com/cancel',
       metadata: {
         amount: amount,
         type: 'coffee_support'
@@ -54,7 +56,7 @@ export default async function handler(req, res) {
     console.error('Stripe session creation error:', error);
     res.status(500).json({ 
       error: 'Failed to create checkout session',
-      details: error.message 
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
   }
 }
