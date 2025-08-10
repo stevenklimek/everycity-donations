@@ -10,22 +10,29 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Use the same URL and key from your original working code
     const response = await fetch(
       'https://cwccgwjvphpluyzxqzxh.supabase.co/rest/v1/donations?select=count(*)', 
       {
         headers: {
-          'apikey': process.env.SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3Y2Nnd2p2cGhwbHV5enhxenhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2NjcyMDcsImV4cCI6MjA3MDI0MzIwN30.zfX9vl-mv68ceT9FcobLibMuhZOxR3cs9tBlNcpmxeo',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3Y2Nnd2p2cGhwbHV5enhxenhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2NjcyMDcsImV4cCI6MjA3MDI0MzIwN30.zfX9vl-mv68ceT9FcobLibMuhZOxR3cs9tBlNcpmxeo',
           'Content-Type': 'application/json'
         }
       }
     );
     
+    console.log('Supabase response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error(`Supabase error: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Supabase error response:', errorText);
+      throw new Error(`Supabase error: ${response.status} - ${errorText}`);
     }
     
     const data = await response.json();
+    console.log('Supabase data:', data);
+    
     const count = data[0]?.count || 2;
     
     res.status(200).json({ 
@@ -34,10 +41,11 @@ export default async function handler(req, res) {
     });
     
   } catch (error) {
-    console.error('Count error:', error);
+    console.error('Count error details:', error.message);
     res.status(200).json({ 
       count: 2, 
       error: 'Failed to fetch count',
+      details: error.message,
       timestamp: new Date().toISOString()
     });
   }
