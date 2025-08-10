@@ -3,14 +3,18 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
+  // Handle both GET and POST requests
+  if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { amount } = req.query;
+  // Get amount from query params (GET) or body (POST)
+  const amount = req.method === 'GET' ? req.query.amount : req.body?.amount;
   
-  if (!amount || isNaN(amount) || amount < 1) {
-    return res.status(400).json({ error: 'Invalid amount' });
+  console.log('Received amount:', amount);
+  
+  if (!amount || isNaN(amount) || parseFloat(amount) < 1) {
+    return res.status(400).json({ error: 'Invalid amount provided' });
   }
 
   try {
@@ -20,22 +24,32 @@ export default async function handler(req, res) {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Coffee Support',
-            description: `Thanks for buying me coffee! ☕`,
+            name: `Coffee Support - $${amount}`,
+            description: 'Thanks for supporting the podcast with coffee! ☕',
           },
           unit_amount: Math.round(parseFloat(amount) * 100), // Convert to cents
         },
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: 'https://your-success-page.com',
-      cancel_url: 'https://your-cancel-page.com',
+      success_url: 'https://your-website.com/thank-you?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://your-website.com/donation-cancelled',
+      metadata: {
+        amount: amount,
+        type: 'coffee_support'
+      }
     });
 
-    // Direct redirect to Stripe
+    console.log('Stripe session created:', session.id);
+    
+    // Redirect directly to Stripe checkout
     res.redirect(302, session.url);
+    
   } catch (error) {
-    console.error('Stripe error:', error);
-    res.status(500).json({ error: 'Payment setup failed' });
+    console.error('Stripe session creation error:', error);
+    res.status(500).json({ 
+      error: 'Failed to create checkout session',
+      details: error.message 
+    });
   }
 }
