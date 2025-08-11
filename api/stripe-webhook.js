@@ -35,7 +35,7 @@ async function getDonationCount(email) {
 // Helper function to send first-time donor email
 async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
     return await resend.emails.send({
-        from: 'Steven (EveryCity Whispers) <steven@everycitywhispers.com>',
+        from: 'Steven from EveryCity Whispers <steven@everycitywhispers.com>',
         to: customerEmail,
         subject: `Thanks for the coffee, ${firstName}! ☕`,
         html: `
@@ -64,7 +64,7 @@ async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
                                
                                 <p>I'll keep this short & sweet, but your contribution means more than you know. Growing a community takes time. Every little signal that someone is genuinely interested helps push me along.</p>
                                 
-                                <p>Questions or just want to say hi? Reply to this email—I'd love to hear from you.</p>
+                                <p>Questions or just want to say hi? Reply to this email — I'd love to hear from you.</p>
                                 
                                 <p>Thanks again,<br>Steven 🎙️</p>
                             </div>
@@ -87,7 +87,7 @@ async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
 // Helper function to send repeat donor email
 async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCount) {
     return await resend.emails.send({
-        from: 'Steven (EveryCity Whispers) <steven@everycitywhispers.com>',
+        from: 'Steven from EveryCity Whispers <steven@everycitywhispers.com>',
         to: customerEmail,
         subject: `${firstName}, you're amazing! ☕ (Thank you again!)`,
         html: `
