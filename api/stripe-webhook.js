@@ -107,7 +107,7 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                         
                         <!-- Main Content -->
                         <div style="padding: 40px 30px;">
-                            <div style="color: #374151; line-height: 1.6; font-size: 16px;">
+                            <div style="color: #000568; line-height: 1.6; font-size: 16px;">
                                 <h1 style="margin: 0 0 30px 0; font-size: 28px; font-weight: 700; color: #000568;">You're Incredible! ☕✨</h1>
                                 
                                 <p>Hey ${firstName},</p>
