@@ -34,6 +34,9 @@ export default async function handler(req, res) {
         const amount = session.amount_total / 100; // Convert cents to dollars
         const customerName = session.customer_details?.name || 'Coffee Supporter';
         
+        // Extract first name only
+        const firstName = customerName.split(' ')[0];
+        
         try {
             // 1. Insert into Supabase database
             const { data, error } = await supabase
@@ -59,51 +62,51 @@ export default async function handler(req, res) {
                     const emailResponse = await resend.emails.send({
                         from: 'steven@everycitywhispers.com',
                         to: customerEmail,
-                        subject: `Thanks for the coffee, ${customerName}! ☕`,
+                        subject: `Thanks for the coffee, ${firstName}! ☕`,
                         html: `
-                            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8fafc;">
-                                <div style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                    <!-- Header -->
-                                    <div style="background: linear-gradient(135deg, #000568 0%, #56a0d3 100%); color: white; padding: 40px 30px; text-align: center;">
-                                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">Thank You, ${customerName}! ☕</h1>
-                                        <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Your coffee support means everything!</p>
-                                    </div>
-                                    
-                                    <!-- Donation Amount -->
-                                    <div style="padding: 30px; text-align: center;">
-                                        <div style="background: linear-gradient(135deg, #000568 0%, #56a0d3 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 30px;">
-                                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; opacity: 0.9;">Donation Confirmed</h2>
-                                            <p style="margin: 10px 0 0 0; font-size: 36px; font-weight: 800; color: #FFFF00;">$${amount.toFixed(2)}</p>
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <title>Every City Whispers Email Preview</title>
+                            </head>
+                            <body style="background: #f0f0f0; padding: 20px;">
+                                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8fafc;">
+                                    <div style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                        
+                                        <!-- Header with Logo on Pink Background -->
+                                        <div style="background: #ff6980; padding: 25px 30px; text-align: center;">
+                                            <!-- Your logo image -->
+                                            <img src="https://assets.zyrosite.com/Yg2yl7rrEViogZx1/ecw_logo_email_header_v4_small-mp8JZO2Mq5Caek3J.png" alt="Every City Whispers" style="max-width: 200px; height: auto; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
                                         </div>
                                         
-                                        <!-- Message -->
-                                        <div style="text-align: left; color: #374151; line-height: 1.6; font-size: 16px;">
-                                            <p>Hey ${customerName},</p>
-                                            <p>Wow, thank you so much for buying me coffee! 🙌 Your support truly keeps the creative energy flowing and helps me produce better content for everyone.</p>
-                                            <p>This contribution will go directly toward:</p>
-                                            <ul style="margin: 15px 0; padding-left: 20px;">
-                                                <li>Quality equipment and software</li>
-                                                <li>Research and preparation time</li>
-                                                <li>And yes, lots of actual coffee! ☕</li>
-                                            </ul>
-                                            <p>I'm genuinely grateful for supporters like you who make this whole thing possible. Keep an eye out for new episodes coming soon!</p>
+                                        <!-- Main Content -->
+                                        <div style="padding: 40px 30px;">
+                                            <!-- Message -->
+                                            <div style="color: #374151; line-height: 1.6; font-size: 16px;">
+                                                <h1 style="margin: 0 0 30px 0; font-size: 28px; font-weight: 700; color: #000568;">Thank You for Your Support! ☕</h1>
+                                                
+                                                <p>Hey ${firstName},</p>
+                                                
+                                                <p>Thank you, thank you, THANK YOU (so much!) for buying me coffee! 🙌 Your support keeps the creative energy flowing and gets me one step closer to doing this EveryCity thing full-time (chasing the dream, you know?).</p>
+                                               
+                                                <p>I'll keep this short & sweet, but your contribution means more than you know. I've been putting a lot of time and energy into trying to make something interesting, and I am intentionally trying not to worry too much about how many people are listening (because I don't want to open the door to anything that could discourage me, and I know that growing a community takes time). But every little signal that someone is genuinely interested helps push me along.</p>
+                                                
+                                                <p>Questions or just want to say hi? Just reply to this email! I'd love to hear from you.</p>
+                                                
+                                                <p>Thanks again,<br>Steven 🎙️</p>
+                                            </div>
+                                            
+                                            <!-- Quote Section with Brand Colors -->
+                                            <div style="background: linear-gradient(135deg, #ff6980 0%, #ffff00 100%); padding: 20px; border-radius: 12px; margin: 30px 0; text-align: center;">
+                                                <p style="margin: 0; color: #000568; font-style: italic; font-size: 14px; font-weight: 600;">
+                                                    "Every great episode starts with great coffee" ☕
+                                                </p>
+                                            </div>
                                         </div>
-                                        
-                                        <!-- Call to Action -->
-                                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin: 30px 0; text-align: center;">
-                                            <p style="margin: 0; color: #6b7280; font-style: italic; font-size: 14px;">
-                                                "Every great episode starts with great coffee" ☕
-                                            </p>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Footer -->
-                                    <div style="background: #f8fafc; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
-                                        <p style="margin: 0;">Questions or just want to say hi? Just reply to this email!</p>
-                                        <p style="margin: 5px 0 0 0; font-weight: 600;">- Steven 🎙️</p>
                                     </div>
                                 </div>
-                            </div>
+                            </body>
+                            </html>
                         `
                     });
                     
