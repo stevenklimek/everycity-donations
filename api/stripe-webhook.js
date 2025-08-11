@@ -16,25 +16,46 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).end('Method Not Allowed');
 
     const sig = req.headers['stripe-signature'];
-    let event;
+    const buf = await buffer(req);
 
+    const LIVE_WHSEC = process.env.STRIPE_WEBHOOK_SECRET;       // live endpoint secret
+    const TEST_WHSEC = process.env.STRIPE_WEBHOOK_SECRET_TEST;  // test endpoint secret (add in Vercel)
+
+    let event;
     try {
-        const buf = await buffer(req);
-        event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-        console.error('Webhook signature verification failed', err.message);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+        // Try Live secret first
+        event = stripe.webhooks.constructEvent(buf, sig, LIVE_WHSEC);
+    } catch (e1) {
+        if (!TEST_WHSEC) {
+            console.error('Live verification failed, no test secret set:', e1.message);
+            return res.status(400).send(`Webhook Error: ${e1.message}`);
+        }
+        try {
+            // Fallback to Test secret
+            event = stripe.webhooks.constructEvent(buf, sig, TEST_WHSEC);
+        } catch (e2) {
+            console.error('Verification failed (live & test):', { live: e1.message, test: e2.message });
+            return res.status(400).send(`Webhook Error: ${e2.message}`);
+        }
     }
 
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
         console.log('Processing completed checkout:', session.id);
         
-        const customerEmail = session.customer_details?.email;
-        const amount = session.amount_total / 100; // Convert cents to dollars
+        // Get email with fallback
+        let customerEmail = session.customer_details?.email;
+        if (!customerEmail && session.customer) {
+            try {
+                const customer = await stripe.customers.retrieve(session.customer);
+                customerEmail = customer?.email || null;
+            } catch (e) {
+                console.warn('Could not fetch customer email:', e.message);
+            }
+        }
+
+        const amount = session.amount_total / 100; // keep your original conversion
         const customerName = session.customer_details?.name || 'Coffee Supporter';
-        
-        // Extract first name only
         const firstName = customerName.split(' ')[0];
         
         try {
@@ -46,12 +67,10 @@ export default async function handler(req, res) {
                     stripe_id: session.id,
                     customer_email: customerEmail,
                     customer_name: customerName
-                    // created_at will use the default now() value
                 }]);
             
             if (error) {
                 console.error('Supabase insert error:', error);
-                // Log error but continue with email
             } else {
                 console.log('Successfully inserted donation:', data);
             }
@@ -110,10 +129,9 @@ export default async function handler(req, res) {
                         `
                     });
                     
-                    console.log('Thank you email sent successfully:', emailResponse.data?.id);
+                    console.log('Thank you email sent successfully:', emailResponse.data?.id, 'livemode:', event.livemode);
                 } catch (emailError) {
                     console.error('Failed to send thank you email:', emailError);
-                    // Don't fail the webhook - log the error but continue
                 }
             } else {
                 console.log('No customer email found in session');
