@@ -112,23 +112,23 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                                 
                                 <p>Hey ${firstName},</p>
                                 
-                                <p>WOW! You've now supported Every City Whispers <strong>${donationCount} times</strong>! 🤯 I'm honestly blown away by your continued support.</p>
+                                <p>WOW! You've now supported Every City Whispers 2 times! 🤯 I'm blown away. I have this stuffed animal monkey at my house ("Ty") who, weirdly, picks up on my energy. Since I saw you made another contribution, he's been running around the apartment throwing things all over the place. He can sense my excitement and Ty does everything 10x.</p>
                                
-                                <p>Seriously, repeat supporters like you are what make this whole thing possible. It's one thing to have someone try out supporting once, but when someone comes back again... that tells me I'm actually creating something worthwhile.</p>
+                                <p>Seriously, you are making this whole EveryCity thing possible. When someone comes back more than once... that tells me I'm actually creating something worthwhile.</p>
                                 
-                                <p>Your ongoing belief in what I'm building here means everything. Every time I see a familiar name pop up, it gives me that extra push to keep going, keep improving, and keep chasing this dream of making Every City Whispers something truly special.</p>
+                                <p>You believe in what I'm doing. That means everything. Every time I see a familiar name pop up, it gives me that extra push to keep going, keep improving, and keep chasing this dream of making Every City Whispers something special.</p>
                                 
                                 <p>You're not just buying coffee at this point – you're investing in something bigger. Thank you for being part of this journey with me.</p>
                                 
-                                <p>As always, feel free to reply and say hi! I love hearing from supporters.</p>
+                                <p>As always, feel free to reply and say hi!</p>
                                 
-                                <p>Grateful beyond words,<br>Steven 🎙️</p>
+                                <p>I appreciate you,<br>Steven 🙏</p>
                             </div>
                             
                             <!-- Special Quote for Repeat Donors -->
                             <div style="background: linear-gradient(135deg, #ff6980 0%, #ffff00 100%); padding: 20px; border-radius: 12px; margin: 30px 0; text-align: center;">
                                 <p style="margin: 0; color: #000568; font-style: italic; font-size: 14px; font-weight: 600;">
-                                    "True supporters don't just listen – they invest in the vision" 🌟
+                                    "True supporters don't just listen – they participate in the vision" 🌟
                                 </p>
                             </div>
                         </div>
