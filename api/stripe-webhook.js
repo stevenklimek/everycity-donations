@@ -30,9 +30,9 @@ export default async function handler(req, res) {
         const session = event.data.object;
         console.log('Processing completed checkout:', session.id);
         
-        // Get customer email from the session
         const customerEmail = session.customer_details?.email;
-        const amount = session.amount_total / 100;
+        const amount = session.amount_total / 100; // Convert cents to dollars
+        const customerName = session.customer_details?.name || 'Coffee Supporter';
         
         try {
             // 1. Insert into Supabase database
@@ -41,48 +41,67 @@ export default async function handler(req, res) {
                 .insert([{ 
                     amount: amount, 
                     stripe_id: session.id,
-                    customer_email: customerEmail // Optional: store email in DB too
+                    customer_email: customerEmail,
+                    customer_name: customerName
+                    // created_at will use the default now() value
                 }]);
             
             if (error) {
                 console.error('Supabase insert error:', error);
-                // Don't return here - still try to send email
+                // Log error but continue with email
             } else {
                 console.log('Successfully inserted donation:', data);
             }
 
-            // 2. Send thank you email via Resend
+            // 2. Send personalized thank you email
             if (customerEmail) {
                 try {
                     const emailResponse = await resend.emails.send({
-                        from: 'thank-you@yourdomain.com', // Replace with your verified domain
+                        from: 'steven@everycitywhispers.com',
                         to: customerEmail,
-                        subject: 'Thank you for buying me coffee! ☕',
+                        subject: `Thanks for the coffee, ${customerName}! ☕`,
                         html: `
-                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                                <div style="text-align: center; margin-bottom: 30px;">
-                                    <h1 style="color: #000568; margin-bottom: 10px;">Thank You for the Coffee! ☕</h1>
-                                    <p style="color: #666; font-size: 16px;">Your support means the world to me!</p>
-                                </div>
-                                
-                                <div style="background: linear-gradient(135deg, #000568 0%, #56a0d3 100%); 
-                                           color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px;">
-                                    <h2 style="margin: 0; margin-bottom: 10px;">Donation Confirmed</h2>
-                                    <p style="font-size: 24px; font-weight: bold; margin: 0;">$${amount}</p>
-                                </div>
-                                
-                                <p style="color: #333; line-height: 1.6;">
-                                    Thanks to your generous support, I can keep creating great content! 
-                                    Your coffee contribution will fuel the next episode and help me continue bringing you quality content.
-                                </p>
-                                
-                                <div style="text-align: center; margin: 30px 0;">
-                                    <p style="color: #666; font-style: italic;">"Every great episode starts with great coffee" ☕</p>
-                                </div>
-                                
-                                <div style="border-top: 1px solid #eee; padding-top: 20px; text-align: center; color: #666; font-size: 14px;">
-                                    <p>Questions? Just reply to this email - I'd love to hear from you!</p>
-                                    <p style="margin: 0;">- [Your Name]</p>
+                            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8fafc;">
+                                <div style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                    <!-- Header -->
+                                    <div style="background: linear-gradient(135deg, #000568 0%, #56a0d3 100%); color: white; padding: 40px 30px; text-align: center;">
+                                        <h1 style="margin: 0; font-size: 28px; font-weight: 700;">Thank You, ${customerName}! ☕</h1>
+                                        <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Your coffee support means everything!</p>
+                                    </div>
+                                    
+                                    <!-- Donation Amount -->
+                                    <div style="padding: 30px; text-align: center;">
+                                        <div style="background: linear-gradient(135deg, #000568 0%, #56a0d3 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 30px;">
+                                            <h2 style="margin: 0; font-size: 18px; font-weight: 600; opacity: 0.9;">Donation Confirmed</h2>
+                                            <p style="margin: 10px 0 0 0; font-size: 36px; font-weight: 800; color: #FFFF00;">$${amount.toFixed(2)}</p>
+                                        </div>
+                                        
+                                        <!-- Message -->
+                                        <div style="text-align: left; color: #374151; line-height: 1.6; font-size: 16px;">
+                                            <p>Hey ${customerName},</p>
+                                            <p>Wow, thank you so much for buying me coffee! 🙌 Your support truly keeps the creative energy flowing and helps me produce better content for everyone.</p>
+                                            <p>This contribution will go directly toward:</p>
+                                            <ul style="margin: 15px 0; padding-left: 20px;">
+                                                <li>Quality equipment and software</li>
+                                                <li>Research and preparation time</li>
+                                                <li>And yes, lots of actual coffee! ☕</li>
+                                            </ul>
+                                            <p>I'm genuinely grateful for supporters like you who make this whole thing possible. Keep an eye out for new episodes coming soon!</p>
+                                        </div>
+                                        
+                                        <!-- Call to Action -->
+                                        <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin: 30px 0; text-align: center;">
+                                            <p style="margin: 0; color: #6b7280; font-style: italic; font-size: 14px;">
+                                                "Every great episode starts with great coffee" ☕
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Footer -->
+                                    <div style="background: #f8fafc; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+                                        <p style="margin: 0;">Questions or just want to say hi? Just reply to this email!</p>
+                                        <p style="margin: 5px 0 0 0; font-weight: 600;">- Steven 🎙️</p>
+                                    </div>
                                 </div>
                             </div>
                         `
@@ -91,7 +110,7 @@ export default async function handler(req, res) {
                     console.log('Thank you email sent successfully:', emailResponse.data?.id);
                 } catch (emailError) {
                     console.error('Failed to send thank you email:', emailError);
-                    // Log error but don't fail the webhook - database update succeeded
+                    // Don't fail the webhook - log the error but continue
                 }
             } else {
                 console.log('No customer email found in session');
