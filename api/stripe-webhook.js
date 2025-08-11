@@ -55,16 +55,16 @@ async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
                         
                         <!-- Main Content -->
                         <div style="padding: 40px 30px;">
-                            <div style="color: #374151; line-height: 1.6; font-size: 16px;">
-                                <h1 style="margin: 0 0 30px 0; font-size: 28px; font-weight: 700; color: #000568;">Thank You for Your Support! ☕</h1>
+                            <div style="color: #000568; line-height: 1.6; font-size: 16px;">
+                                <h1 style="margin: 0 0 30px 0; font-size: 28px; font-weight: 700; color: #000568;">Thank You, Thank You, THANK YOU! ☕</h1>
                                 
                                 <p>Hey ${firstName},</p>
                                 
-                                <p>Thank you, thank you, THANK YOU (so much!) for buying me coffee! 🙌 Your support keeps the creative energy flowing and gets me one step closer to doing this EveryCity thing full-time (chasing the dream, you know?).</p>
+                                <p>Thank you (so much!) for buying me coffee! 🙌 Your support keeps the creative energy flowing and gets me one step closer to doing this EveryCity thing full-time (chasing the dream, you know?).</p>
                                
-                                <p>I'll keep this short & sweet, but your contribution means more than you know. I've been putting a lot of time and energy into trying to make something interesting, and I am intentionally trying not to worry too much about how many people are listening (because I don't want to open the door to anything that could discourage me, and I know that growing a community takes time). But every little signal that someone is genuinely interested helps push me along.</p>
+                                <p>I'll keep this short & sweet, but your contribution means more than you know. Growing a community takes time. Every little signal that someone is genuinely interested helps push me along.</p>
                                 
-                                <p>Questions or just want to say hi? Just reply to this email! I'd love to hear from you.</p>
+                                <p>Questions or just want to say hi? Reply to this email—I'd love to hear from you.</p>
                                 
                                 <p>Thanks again,<br>Steven 🎙️</p>
                             </div>
@@ -112,9 +112,11 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                                 
                                 <p>Hey ${firstName},</p>
                                 
-                                <p>WOW! You've now supported Every City Whispers <strong>${donationCount} times</strong>! 🤯 I'm blown away. I have this stuffed animal monkey at my house ("Ty") who, weirdly, picks up on my energy. Since I saw you made another contribution, he's been running around the apartment throwing things all over the place. He can sense my excitement and Ty does everything 10x.</p>
+                                <p>WOW! You've now supported Every City Whispers <strong>${donationCount} times</strong>! 🤯 I'm blown away.</p>
+                                
+                                 <p>I have this stuffed animal monkey at my house ("Ty") who, weirdly, picks up on my energy. Since you made another contribution, he started running around the apartment throwing things all over the place. He can sense my excitement and Ty does everything 10x (as for me, well, I get to clean up).</p>
                                
-                                <p>Seriously, you are making this whole EveryCity thing possible. When someone comes back more than once... that tells me I'm actually creating something worthwhile.</p>
+                                <p>Seriously, you make EveryCity Whispers possible. When someone comes back more than once, that tells me I'm actually creating something worthwhile.</p>
                                 
                                 <p>You believe in what I'm doing. That means everything. Every time I see a familiar name pop up, it gives me that extra push to keep going, keep improving, and keep chasing this dream of making Every City Whispers something special.</p>
                                 
@@ -128,7 +130,7 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                             <!-- Special Quote for Repeat Donors -->
                             <div style="background: linear-gradient(135deg, #ff6980 0%, #ffff00 100%); padding: 20px; border-radius: 12px; margin: 30px 0; text-align: center;">
                                 <p style="margin: 0; color: #000568; font-style: italic; font-size: 14px; font-weight: 600;">
-                                    "True supporters don't just listen – they participate in the vision" 🌟
+                                    "Every city whispers something—you just have to listen." 🌟
                                 </p>
                             </div>
                         </div>
