@@ -120,7 +120,7 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                                 
                                 <p>You believe in what I'm doing. That means everything. Every time I see a familiar name pop up, it gives me that extra push to keep going, keep improving, and keep chasing this dream of making Every City Whispers something special.</p>
                                 
-                                <p>You're not just buying coffee at this point – you're investing in something bigger. Thank you for being part of this journey with me.</p>
+                                <p>You're not just buying coffee at this point – you're on the journey with me. Thanks again for being part of it!</p>
                                 
                                 <p>As always, feel free to reply and say hi!</p>
                                 
