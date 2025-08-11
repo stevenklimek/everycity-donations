@@ -35,7 +35,7 @@ async function getDonationCount(email) {
 // Helper function to send first-time donor email
 async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
     return await resend.emails.send({
-        from: 'steven@everycitywhispers.com',
+        from: 'Steven (EveryCity Whispers) <steven@everycitywhispers.com>',
         to: customerEmail,
         subject: `Thanks for the coffee, ${firstName}! ☕`,
         html: `
@@ -56,13 +56,13 @@ async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
                         <!-- Main Content -->
                         <div style="padding: 40px 30px;">
                             <div style="color: #374151; line-height: 1.6; font-size: 16px;">
-                                <h1 style="margin: 0 0 30px 0; font-size: 28px; font-weight: 700; color: #000568;">Thank You, Thank You, THANK YOU! ☕</h1>
+                                <h1 style="margin: 0 0 30px 0; font-size: 28px; font-weight: 700; color: #000568;">Thank You for Your Support! ☕</h1>
                                 
                                 <p>Hey ${firstName},</p>
                                 
-                                <p>Thank you (so much!) for buying me coffee! 🙌 Your support keeps the creative energy flowing and gets me one step closer to doing this EveryCity thing full-time (chasing the dream, you know?).</p>
+                                <p>Thank you, thank you, THANK YOU (so much!) for buying me coffee! 🙌 Your support keeps the creative energy flowing and gets me one step closer to doing this EveryCity thing full-time (chasing the dream, you know?).</p>
                                
-                                <p>I'll keep this short & sweet, but your contribution means more than you know. Growing a community takes time, but every little signal that someone is genuinely interested helps push me along.</p>
+                                <p>I'll keep this short & sweet, but your contribution means more than you know. I've been putting a lot of time and energy into trying to make something interesting, and I am intentionally trying not to worry too much about how many people are listening (because I don't want to open the door to anything that could discourage me, and I know that growing a community takes time). But every little signal that someone is genuinely interested helps push me along.</p>
                                 
                                 <p>Questions or just want to say hi? Just reply to this email! I'd love to hear from you.</p>
                                 
@@ -87,7 +87,7 @@ async function sendFirstTimeDonorEmail(customerEmail, firstName, amount) {
 // Helper function to send repeat donor email
 async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCount) {
     return await resend.emails.send({
-        from: 'steven@everycitywhispers.com',
+        from: 'Steven (EveryCity Whispers) <steven@everycitywhispers.com>',
         to: customerEmail,
         subject: `${firstName}, you're amazing! ☕ (Thank you again!)`,
         html: `
@@ -112,23 +112,23 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                                 
                                 <p>Hey ${firstName},</p>
                                 
-                                <p>WOW! You've now supported Every City Whispers <strong>${donationCount} times</strong>! 🤯 I'm blown away. I have this stuffed animal monkey at my house ("Ty") who, weirdly, picks up on my energy. Since I saw you made another contribution, he's been running around the apartment throwing things all over the place. He can sense my excitement and Ty does everything 10x.</p>
+                                <p>WOW! You've now supported Every City Whispers <strong>${donationCount} times</strong>! 🤯 I'm honestly blown away by your continued support.</p>
                                
-                                <p>Seriously, you are making this whole EveryCity thing possible. When someone comes back more than once... that tells me I'm actually creating something worthwhile.</p>
+                                <p>Seriously, repeat supporters like you are what make this whole thing possible. It's one thing to have someone try out supporting once, but when someone comes back again... that tells me I'm actually creating something worthwhile.</p>
                                 
-                                <p>Your ongoing belief in what I'm building here means everything. Every time I see a familiar name pop up, it gives me that extra push to keep going, keep improving, and keep chasing this dream of making Every City Whispers something special.</p>
+                                <p>Your ongoing belief in what I'm building here means everything. Every time I see a familiar name pop up, it gives me that extra push to keep going, keep improving, and keep chasing this dream of making Every City Whispers something truly special.</p>
                                 
                                 <p>You're not just buying coffee at this point – you're investing in something bigger. Thank you for being part of this journey with me.</p>
                                 
-                                <p>As always, feel free to reply and say hi!</p>
+                                <p>As always, feel free to reply and say hi! I love hearing from supporters.</p>
                                 
-                                <p>I appreciate you 🙏,<br>Steven 🎙️</p>
+                                <p>Grateful beyond words,<br>Steven 🎙️</p>
                             </div>
                             
                             <!-- Special Quote for Repeat Donors -->
                             <div style="background: linear-gradient(135deg, #ff6980 0%, #ffff00 100%); padding: 20px; border-radius: 12px; margin: 30px 0; text-align: center;">
                                 <p style="margin: 0; color: #000568; font-style: italic; font-size: 14px; font-weight: 600;">
-                                    "True supporters don't just listen – they participate in the vision" 🌟
+                                    "True supporters don't just listen – they invest in the vision" 🌟
                                 </p>
                             </div>
                         </div>
