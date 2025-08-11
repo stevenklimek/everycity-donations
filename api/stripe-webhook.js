@@ -112,7 +112,7 @@ async function sendRepeatDonorEmail(customerEmail, firstName, amount, donationCo
                                 
                                 <p>Hey ${firstName},</p>
                                 
-                                <p>WOW! You've now supported Every City Whispers 2 times! 🤯 I'm blown away. I have this stuffed animal monkey at my house ("Ty") who, weirdly, picks up on my energy. Since I saw you made another contribution, he's been running around the apartment throwing things all over the place. He can sense my excitement and Ty does everything 10x.</p>
+                                <p>WOW! You've now supported Every City Whispers <strong>${donationCount} times</strong>! 🤯 I'm blown away. I have this stuffed animal monkey at my house ("Ty") who, weirdly, picks up on my energy. Since I saw you made another contribution, he's been running around the apartment throwing things all over the place. He can sense my excitement and Ty does everything 10x.</p>
                                
                                 <p>Seriously, you are making this whole EveryCity thing possible. When someone comes back more than once... that tells me I'm actually creating something worthwhile.</p>
                                 
